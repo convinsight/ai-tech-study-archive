@@ -15,6 +15,12 @@ mathjax: true
 * CNN으로 구성된 Network
 * 시작부분에 11 x 11의 큰 convolution Layer를 사용했다
 
+<center>
+
+<img src="./img/Alexnet.png" alt="" width="500px"/>
+
+</center>
+
 ### VGGNet
 * 여러장의 3 x 3의 convolution Layer와 2 x 2 MaxPooling을 사용하였다
 * 여러장의 3 x 3의 convolution Layer를 사용하면서 다음과 같은 advantage를 얻었다
@@ -28,7 +34,7 @@ mathjax: true
 
 <center>
 
-<img src="/img/inceptionblock.PNG" alt="" width="500px"/>
+<img src="./img/inceptionblock.PNG" alt="" width="500px"/>
 
 </center>
 
@@ -42,7 +48,7 @@ mathjax: true
 
 <center>
 
-<img src="/img/resiblock.PNG" alt="" width="300px"/>
+<img src="./img/resiblock.PNG" alt="" width="300px"/>
 
 </center>
 
