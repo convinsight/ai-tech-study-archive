@@ -107,3 +107,16 @@ shortcut(=skip) connection을 통해 gradient vanishing 문제를 해결
 3. **single FC layer**
 
     output
+
+    
+## Beyond ResNets _ DenseNet
+
+> Resdual 블록: skip connection을 통해서 전달된 x(identity) mapping을 더함 & 직전 블록의 정보 받음Dense 블록: channel 축으로 concatenation을 하도록 함 & 직전 블록/훨씬 이전 블록의 정보도 넘겨받음
+> 
+- resdual 블록에서의 **+** vs. Dense 블록에서의 **concatenation**
++ 연산: 두 신호를 합침
+concatenation 연산: (channel은 늘어나지만) 신호가 보존되어있음. 따라서 하위 정보 이용시 용이
+    
+<img src="./assets/CV_01_ImageClassification02_12.png" alt="" width="350px"/>
+    
+<img src="./assets/CV_01_ImageClassification02_13.png" alt="" width="650px"/>
