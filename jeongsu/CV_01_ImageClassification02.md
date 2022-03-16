@@ -6,7 +6,7 @@
 
 → degradation problem (훈련 정확도의 퇴화)
   
-<img src="./assets/CV_01_ImageClassification02_01.png" alt="" width="500px"/>
+<img src="./assets/CV_01_ImageClassification02_01.png" alt="" width="650px"/>
 
 ## GoogLeNet
 
@@ -50,4 +50,60 @@
 - low layer 까지의 gradient 도달
 - train에서만 사용하고, test에서는 해당 부분 제거
     
-<img src="./assets/CV_01_ImageClassification02_06.png" alt="" width="500px"/>
+<img src="./assets/CV_01_ImageClassification02_06.png" alt="" width="300px"/>
+
+  
+## ResNet
+
+> 최초로 100개가 넘게 layer를 쌓아도 성능이 높아진 첫 논문 
+최초로 인간 레벨 성능을 뛰어넘어 imageNet 대회 1등
+Image Classification 문제뿐아니라 localization, detection, segmentation 문제 모두 1등 
+CVPR best paper award 수상
+> 
+
+깊게 쌓으려는 노력들은 있었음. 왜 이전에는 깊게 쌓아도 성능을 올리지 못했을까. 
+
+**→ Degradation problem**
+
+<img src="./assets/CV_01_ImageClassification02_07.png" alt="" width="500px"/>
+
+deeper layer가 될수록 Overfitting(train😀 test😡)이 될것이라 예상 
+
+하지만, 실험 결과 Degradation(train😡 test😡)이 됨. 즉, 최적화가 잘 안됨
+
+> **shortcut connection  제안**
+> 
+- “Residual block”  F(x)+x
+    
+<img src="./assets/CV_01_ImageClassification02_08.png" alt="" width="500px"/>
+    
+    shortcut(=skip) connection을 통해 gradient vanishing 문제를 해결 
+    
+- Resudual connection 의 성능이 좋은 이유
+    
+<img src="./assets/CV_01_ImageClassification02_09.png" alt="" width="500px"/>
+    
+    층을 쌓으면 쌓을수록 경로의 경우의 수($2^n$)가 많아짐  
+    
+    > **shortcut connection을 사용한 ResNet의 ‘전체구조’**
+    > 
+    
+<img src="./assets/CV_01_ImageClassification02_10.png" alt="" width="500px"/>
+    
+    1. **7x7 convolution , He initialization**
+        
+        일반적인 initialization을 적용하면 게속해서 더해지는 x값이 너무 큼 
+        
+        → ResNet에 적합한 initialization 사용해야함 = He initialization 
+        
+<img src="./assets/CV_01_ImageClassification02_11.png" alt="" width="500px"/>
+        
+    2. **stack residual block, 3x3 convolution**
+        
+        3x3 convolution filter를 사용하여, 연산량(파라미터수)이 크게 늘어나지 X 
+        
+        이미지의 색별로 블럭 나눠져 있음, 한 단계를 넘어 갈때마다 공간해상도/2 (stride 2)→ 채널수*2
+        
+    3. **single FC layer**
+        
+        output
