@@ -158,7 +158,120 @@
 
 ### 2.2 ResNet
 
-- 추가 예정
+- ResNet
+
+  - ResNet 은 최초로 100 개 이상의 Layer 를 쌓으며,  
+    더 깊은 Layer 로 더 좋은 성능을 이끌어낸 모델
+
+  - 인간의 능력을 뛰어넘으며 2015년 ImageNet 대회에서 1등 차지
+
+  - ImageNet Classification 뿐아니라, localization, Detection, Segmentation 도 1등 차지
+
+
+
+
+- Revolutions of depth
+  - Building ultra-deeper than any other networks
+  - What makes it hard to build a very deep architecture
+    - **Degradation problem**
+    - Degradation problem 으로 layer 가 깊어져도 성능이 향상되지 않던 한계를 극복
+
+
+
+- Degradation problem
+  - As the network depth increases, accuracy gets saturated -> degrade rapidly
+  - 모델의 parameter 가 많아지면 Overfitting 에 취약할 것이라고 생각했었지만,  
+    더 깊은 층 (56-layer) 의 training, test error 가 모두 더 얕은 층 (20-layer) 의 error 보다 안좋은  
+    성능을 보여주며 Overfitting 문제가 아닌 **degradation problem** (optimization) 문제라는 결론을 냄
+    - cf) Overfitting 이 문제였다면, 더 깊은 층의 training error 는 더 좋은 성능을 내지만,  
+      test error 에서 더 안좋은 성능을 보여주었어야한다
+
+![image-20220316133849697](https://s2.loli.net/2022/03/16/ZJEHjLWpRbcy2GK.png)
+
+
+
+- **Hypothesis**
+
+  - Plain Layer
+
+    - As the layers get deeper, it is hard to learn good $H(x)$ directly
+    - $H(x)$ 라는 mapping 을 학습할 때에,  
+      layer 를 높게 쌓아서 곧바로 $x$ 에서 $H(x)$ 의 관계를 학습하려고하면,  
+      복잡하기에 학습하기 어렵다
+
+    
+
+  - Residual block
+
+    - 입력으로 주어진 $x$ (identity) 외의 잔여 부분 (residual) 만 모델링하여,  
+      학습하게끔 변경
+    - Target function : $H(x) = F(x) + x$
+    - Residual function : $F(x) = H(x) - x$
+
+
+
+- **Solution : Shortcut connection**
+  - skip connection 이라고도 한다
+  - 기존의 gradient 가 vanishing 되더라도, shortcut connection (identity) 에 의한 gradient 가 남아있기에,  
+    gradient vanishing 문제를 해소할 수 있게됨
+
+![image-20220316134559604](https://s2.loli.net/2022/03/16/LvnfwCXk3gsYQ9G.png)
+
+
+
+- Analysis of residual connection
+  - gradient 가 지나갈 수 있는 2^n^ 개의 input, output path 가 생성된다
+    - 다양한 경우의 수를 갖는 경로를 통해서 복잡한 mapping 을 학습할 수 있게 된다는 분석
+    - residual block 이 하나 추가될 때마다 경로 수가 2배씩 증가
+  - Residual networks have $O(2^n)$ implicit paths connecting input and output,  
+    and adding a block doubles the number of paths
+
+![image-20220316134944556](https://s2.loli.net/2022/03/16/pDWKN1QjCtbxHc9.png)
+
+
+
+- Overall architecture
+
+  ![image-20220316142440075](https://s2.loli.net/2022/03/16/Fy6TRq9WgGQDCwx.png)
+
+  - 시작 part
+
+    - 7x7 Conv layer 1개
+    - He initialization
+      - ResNet 에 적합한 initialization
+      - He 가 아닌 일반적인 initialization 을 사용하면,  
+        skip connection 과정에서 처음부터 더해지는 값이 커지게된다
+
+    
+
+  - Residual Block part
+
+    - Stack residual blocks
+
+    - Every residual block has two 3x3 conv layers
+
+      - residual block 내부의 layer 는 모두 3x3 conv 사용
+      - 상대적으로 연산이 빠른 이유
+
+    - Batch norm after every conv layer
+
+      
+
+    - Doubling the number of filters and spatially down-sampling by stride 2 instead of spatial pooling
+
+      - residual block part 가 바뀔때마다,  
+        down sampling 을 통해 공간상의 크기는 절반으로 줄고, 채널 수는 두 배씩 증가
+
+    
+
+  - 최종 출력
+
+    - Only a single FC layer for output classes
+    - avg pool 을 적용한 후, 하나의 FC layer 로 구성
+
+
+
+
 
 
 
