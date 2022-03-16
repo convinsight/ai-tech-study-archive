@@ -34,7 +34,7 @@
 
 <img width="70%" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0621d563-da5a-4f2b-8073-301ba92080e9/10.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220315%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220315T233917Z&X-Amz-Expires=86400&X-Amz-Signature=b2db2dda9091c0e73308d5eaa1e8968936f9207111de7f973a446c51bff48093&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%2210.gif%22&x-id=GetObject">
 
-- 위 그림을 보면 **앞단에서 만들어진 feature를 그대로 뒤로 전달**을 해서 **concatenation** 하는 방법을 사용을 합니다. 따라서 **feature를 계속에서 끝단 까지 전달**하는 데 장점이 있습니다.
+- 위 그림을 보면 **앞단에서 만들어진 feature를 그대로 뒤로 전달**을 해서 **concatenation** 하는 방법을 사용을 합니다. 따라서 **feature를 계속해서 끝단 까지 전달**하는 데 장점이 있습니다.
 
 > **feature reuse**  → DenseNet 항목에서 설명
 > 
@@ -50,12 +50,18 @@
 
 ### 배경
 
-- CNN (Convolutional Neural Networks)는 visual object recognition에 자주 사용되나, CNN의 네트워크가 깊어질수록(= input이나 gradient가 많은 layer를 거칠수록) 네트워크 끝 부분에서는 gradient가 소실 되는(vanishing) 문제 발생
-- 이 문제를 해결하기 위해 **ResNet/Highway network/Stochastsic depth/FractalNets** 등장
-- 1️⃣ **ResNet과 2️⃣ Highway Network**는 **identity connection**(자기 자신을 다시 feed시켜주는 방식)을 사용
-- 3️⃣ **Stochastic depth**는 Resnet의 **layer를 random하게 없애주어**(dropping layer) **크기를 줄임**
-- 4️⃣ **Fractal Net**은 각기 다른 숫자의 convolutional block들로 이루어진 parallel layer들의 sequence를 여러 번 반복시켜 **short path를 유지**한 채 nominal depth(공칭두께)를 크게 하였다. (?)
+- CNN (Convolutional Neural Networks)는 visual object recognition에 자주 사용되나, CNN의 네트워크가 깊어질수록(= input이나 gradient가 많은 layer를 거칠수록) 네트워크 끝 부분에서는 gradient가 소실 되는(vanishing) 문제 발생  
+
+- 이 문제를 해결하기 위해 **ResNet/Highway network/Stochastsic depth/FractalNets** 등장  
+
+- 1️⃣ **ResNet과 2️⃣ Highway Network**는 **identity connection**(자기 자신을 다시 feed시켜주는 방식)을 사용  
+
+- 3️⃣ **Stochastic depth**는 Resnet의 **layer를 random하게 없애주어**(dropping layer) **크기를 줄임**  
+
+- 4️⃣ **Fractal Net**은 각기 다른 숫자의 convolutional block들로 이루어진 parallel layer들의 sequence를 여러 번 반복시켜 **short path를 유지**한 채 nominal depth(공칭두께)를 크게 하였다. (?)  
+
 - 문제를 해결하는 핵심 : **앞 쪽의 layer와 뒤 쪽의 layer를 short path로 연결**
+
 
 ### DenseNet
 
@@ -66,13 +72,15 @@
 
 > ***information preservation***
 > 
-- ***ResNet***은 identity transformation을 더해서(summation) **later layer로부터 early layer로의 gradient flow가 직접 연결된다는 장점**이 있지만, **identity transformation과 출력 H(x−1)이 summation됨에 따라 information flow를 방해**할 수 있다.
-    - gradient가 흐르게 된다는 점은 도움이 되지만, forward pass에서 보존되어야 하는 정보들이 **summation을 통해 변경되어 보존되지 못할 수 있다**는 의미이다. (DenseNet은 concatenation을 통해 그대로 보존)
+- ***ResNet***은 identity transformation을 더해서(summation) **later layer로부터 early layer로의 gradient flow가 직접 연결된다는 장점**이 있지만, **identity transformation과 출력 H(x−1)이 summation됨에 따라 information flow를 방해**할 수 있다.  
+
+    - gradient가 흐르게 된다는 점은 도움이 되지만, forward pass에서 보존되어야 하는 정보들이 **summation을 통해 변경되어 보존되지 못할 수 있다**는 의미이다. (DenseNet은 concatenation을 통해 그대로 보존)  
+    
 - ***DenseNet***은 feature map을 그대로 보존하면서, feature map의 일부를 layer에 **concatenation** → 네트워크에 **더해질 information**과 **보존되어야 할 information**을 분리해서 처리 → information 보존
 
 > ***improved flow of information and gradient***
 > 
-- **모든 layer가 이전의 다른 layer들과 직접적으로 연결**되어 있기 때문에, loss function이나 input signal의 gradient에 직접적으로 접근 가능 + **gradient vanishing이 없어짐 →** 네트워크가 깊은 **구조를 만드는 것이 가능**
+- **모든 layer가 이전의 다른 layer들과 직접적으로 연결**되어 있기 때문에, loss function이나 input signal의 gradient에 직접적으로 접근 가능 + **gradient vanishing이 없어짐 →** 네트워크를 깊은 **구조로 만드는 것이 가능**
 
 > ***regularizing effect***
 > 
@@ -98,7 +106,7 @@
 
 <img width="30%" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0ad0a3f2-22e5-4dd5-91ba-a1f9e48e4bf9/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220315%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220315T234245Z&X-Amz-Expires=86400&X-Amz-Signature=200133f3d750949a0b699837a03bb500d5396434d42458e5fad79d6ad2aa6058&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject">  
 
-> Composite function  
+> ***Composite function***  
 >   
 - H(x)는 합성함수로, 아래의 3개 연산이 결합된 구조
     - batch normalization (BN)
@@ -108,8 +116,7 @@
 <summary>📎Batch Normalization  </summary>
 <div markdown="1">      
 
-- `Batch` 단위로 학습을 하게 되면 발생하는 문제점 →  **학습 과정에서 계층 별로 입력의 데이터 분포가 달라지는 현상**
-- (∵ 각 계층에서 입력으로 feature를 받게 되고 그 feature는 convolution이나 위와 같이 fully connected 연산을 거친 뒤 activation function을 적용 → 그러면 **연산 전/후에 데이터 간 분포가 달라질 수**가 있음) → 이와 유사하게 Batch 단위로 학습을 하게 되면 **Batch 단위간에 데이터 분포의 차이**가 발생할 수 있음
+- `Batch` 단위로 학습을 하게 되면 발생하는 문제점 →  **Batch 단위간에 데이터 분포가 달라지는 현상**
 - 이 문제를 개선하기 위해 **Batch Normalization** 개념이 적용
 - **batch normalization →** 학습 과정에서 각 배치 단위 별로 데이터가 다양한 분포를 가지더라도 **각 배치별로 평균과 분산을 이용해 정규화**하는 것
 
@@ -121,15 +128,22 @@
 > 
 <img width="70%" src="https://i.imgur.com/64MoJfm.png">
 
-- feature map의 크기가 변경될 경우, **concatenation 연산**을 수행할 수 없음 (∵ 평행하게 합치는 것이 불가능) ↔ CNN은 **down-sampling**은 필수이므로, layer마다 feature map의 크기가 달라질 수 밖에 없음
-- DenseNet은 네트워크 전체를 몇 개의 dense block으로 나눠서 **같은 feature map size를 가지는 레이어들은 같은 dense block**내로 묶음
-- 위 그림에서는 총 3개의 dense block으로 나눔
-    - **같은 블럭 내의 레이어들은 전부 같은 feature map size**를 가짐 ⇒ concatenation 연산 가능
-    - **transition layer(**빨간 네모를 친 pooling과 convolution 부분**)** ⇒ down-sampling 가능
-        - Batch Normalization(BN)
+- feature map의 크기가 변경될 경우, **concatenation 연산**을 수행할 수 없음 (∵ 평행하게 합치는 것이 불가능) ↔ CNN은 **down-sampling**은 필수이므로, layer마다 feature map의 크기가 달라질 수 밖에 없음  
+
+- DenseNet은 네트워크 전체를 몇 개의 dense block으로 나눠서 **같은 feature map size를 가지는 레이어들은 같은 dense block**내로 묶음  
+
+- 위 그림에서는 총 3개의 dense block으로 나눔  
+
+    - **같은 블럭 내의 레이어들은 전부 같은 feature map size**를 가짐 ⇒ concatenation 연산 가능  
+    
+    - **transition layer(**빨간 네모를 친 pooling과 convolution 부분**)** ⇒ down-sampling 가능  
+    
+        - Batch Normalization(BN) 
         - 1×1 convolution → feature map의 개수(= channel 개수)를 줄임
-        - 2×2 average pooling → feature map의 가로/세로 크기를 줄임
-    - ex. dense block1에서 100x100 size의 feature map을 가지고 있었다면 dense block2에서는 50x50 size의 feature map
+        - 2×2 average pooling → feature map의 가로/세로 크기를 줄임  
+        
+    - ex. dense block1에서 100x100 size의 feature map을 가지고 있었다면 dense block2에서는 50x50 size의 feature map  
+    
 - 위 그림에서 **가장 처음에 사용되는 convolution 연산 →** input 이미지의 사이즈를 dense block에 맞게 조절하기 위한 용도로 사용됨 → 이미지의 사이즈에 따라서 사용해도 되고 사용하지 않아도 됨
 <details>
 <summary>📎pooling layer  </summary>
@@ -150,15 +164,23 @@
 
 - input의 채널 개수 k_0와 이전 (l-1)개의 layer → H(x) → output으로, k feature maps (단, k_0 : input layer의 channel 개수)
     - input : k_0+k*(l-1)
-    - output : k
-- **Growth rate(= hyperparameter k) →** 각 layer의 **feature map의 channel 개수**
-- 각 feature map끼리 densely connection 되는 구조이므로 자칫 **feature map의 channel 개수가 많을 경우**, 계속해서 channel-wise로 concatenate 되면서 channel이 많아질 수 있음 ⇒ DenseNet에서는 각 layer의 feature map의 channel 개수로 **작은 값**을 사용
-- **concatenation 연산**을 하기 위해서 각 layer 에서의 output 이 **똑같은 channel 개수**가 되는 것이 좋음 → 1x1 convolution으로 growth rate 조절
-- 위의 그림 1은 **k(growth rate) = 4 인 경우**를 의미
+    - output : k  
+
+- **Growth rate(= hyperparameter k) →** 각 layer의 **feature map의 channel 개수**  
+
+- 각 feature map끼리 densely connection 되는 구조이므로 자칫 **feature map의 channel 개수가 많을 경우**, 계속해서 channel-wise로 concatenate 되면서 channel이 많아질 수 있음 ⇒ DenseNet에서는 각 layer의 feature map의 channel 개수로 **작은 값**을 사용  
+
+- **concatenation 연산**을 하기 위해서 각 layer 에서의 output 이 **똑같은 channel 개수**가 되는 것이 좋음 → 1x1 convolution으로 growth rate 조절  
+
+- 위의 그림 1은 **k(growth rate) = 4 인 경우**를 의미  
+
     - 6 channel feature map인 input이 dense block의 4번의 **convolution block**을 통해 (6 + 4 + 4 + 4 + 4 = 22) 개의 channel을 갖는 feature map output으로 계산이 되는 과정
-    - DenseNet의 각 dense block의 각 layer마다 feature map의 channel 개수 또한 간단한 등차수열로 나타낼 수 있음
-- DenseNet은 **작은 k**를 사용 → (다른 모델에 비해) **좁은 layer로 구성 ⇒ 좁은 layer로 구성해도 DenseNet이 좋은 성능을 보이는 이유?**
-    - Dense block내에서 각 layer들은 **모든 preceding feature map에 접근 가능** (= 네트워크의 “collective knowledge”에 접근) ⇒ (생각) **preceding feature map = 네트워크의 global state**
+    - DenseNet의 각 dense block의 각 layer마다 feature map의 channel 개수 또한 간단한 등차수열로 나타낼 수 있음  
+    
+- DenseNet은 **작은 k**를 사용 → (다른 모델에 비해) **좁은 layer로 구성 ⇒ 좁은 layer로 구성해도 DenseNet이 좋은 성능을 보이는 이유?**  
+ 
+    - Dense block내에서 각 layer들은 **모든 preceding feature map에 접근 가능** (= 네트워크의 “collective knowledge”에 접근)    
+        ⇒ (생각) **preceding feature map = 네트워크의 global state**
     - **growth rate k** → 각 layer가 **global state**에 얼마나 많은 새로운 정보를 contribute할 것인지를 조절
     - ⇒ **모든 layer가 접근할 수 있는 global state로 인해 DenseNet은** 기존의 네트워크들과 같이 **layer의 feature map을 복사해서 다른 layer로 넘겨주는 등의 작업을 할 필요가 없음 (= feature reuse)**
 
