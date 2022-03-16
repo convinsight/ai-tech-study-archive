@@ -75,35 +75,35 @@ deeper layer가 될수록 Overfitting(train😀 test😡)이 될것이라 예�
 > 
 - “Residual block”  F(x)+x
     
-<img src="./assets/CV_01_ImageClassification02_08.png" alt="" width="500px"/>
-    
-    shortcut(=skip) connection을 통해 gradient vanishing 문제를 해결 
+<img src="./assets/CV_01_ImageClassification02_08.png" alt="" width="350px"/>
+
+shortcut(=skip) connection을 통해 gradient vanishing 문제를 해결 
     
 - Resudual connection 의 성능이 좋은 이유
     
 <img src="./assets/CV_01_ImageClassification02_09.png" alt="" width="500px"/>
     
-    층을 쌓으면 쌓을수록 경로의 경우의 수($2^n$)가 많아짐  
+층을 쌓으면 쌓을수록 경로의 경우의 수($2^n$)가 많아짐  
+
+> **shortcut connection을 사용한 ResNet의 ‘전체구조’**
+> 
     
-    > **shortcut connection을 사용한 ResNet의 ‘전체구조’**
-    > 
+<img src="./assets/CV_01_ImageClassification02_10.png" alt="" width="650px"/>
     
-<img src="./assets/CV_01_ImageClassification02_10.png" alt="" width="500px"/>
-    
-    1. **7x7 convolution , He initialization**
+1. **7x7 convolution , He initialization**
+
+    일반적인 initialization을 적용하면 게속해서 더해지는 x값이 너무 큼 
+
+    → ResNet에 적합한 initialization 사용해야함 = He initialization 
         
-        일반적인 initialization을 적용하면 게속해서 더해지는 x값이 너무 큼 
+<img src="./assets/CV_01_ImageClassification02_11.png" alt="" width="350px"/>
         
-        → ResNet에 적합한 initialization 사용해야함 = He initialization 
-        
-<img src="./assets/CV_01_ImageClassification02_11.png" alt="" width="500px"/>
-        
-    2. **stack residual block, 3x3 convolution**
-        
-        3x3 convolution filter를 사용하여, 연산량(파라미터수)이 크게 늘어나지 X 
-        
-        이미지의 색별로 블럭 나눠져 있음, 한 단계를 넘어 갈때마다 공간해상도/2 (stride 2)→ 채널수*2
-        
-    3. **single FC layer**
-        
-        output
+2. **stack residual block, 3x3 convolution**
+
+    3x3 convolution filter를 사용하여, 연산량(파라미터수)이 크게 늘어나지 X 
+
+    이미지의 색별로 블럭 나눠져 있음, 한 단계를 넘어 갈때마다 공간해상도/2 (stride 2)→ 채널수*2
+
+3. **single FC layer**
+
+    output
